@@ -1,0 +1,1 @@
+Enlaces lit:	2925/nEnlaces bin:	2930/nEnlaces mul:	9070/nNodos lit:	1536/nNodos bin:	2018/nNodos mul:	1622/n

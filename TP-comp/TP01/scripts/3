@@ -1,0 +1,60 @@
+#!/usr/bin/env python 
+# Script TP1
+
+
+import networkx as nx
+import matplotlib.pylab as plt
+
+
+
+archive_bin="/home/andrest/TP01/data_TP1/yeast_Y2H.txt"
+archive_lit="/home/andrest/TP01/data_TP1/yeast_LIT.txt"
+archive_mul="/home/andrest/TP01/data_TP1/yeast_AP-MS.txt"
+
+
+print(len(archive_bin))
+
+def ldata(archive):
+        f=open(archive)
+	data=[]
+	for line in f:
+		line=line.strip()
+		col=line.split()
+		data.append(col)	
+	return data
+
+lista = ldata(archive_mul)
+
+#print(lista)
+#
+#G = nx.Graph()
+#
+#
+#G.add_edges_from(lista)
+#
+#nx.draw(G, with_labels=True, font_weight='bold')
+#
+#
+## Numero de enlaces
+#
+#
+#plt.show()
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
