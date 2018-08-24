@@ -1,0 +1,6 @@
+Enlaces lit:	2925
+Enlaces bin:	2930
+Enlaces mul:	9070
+Nodos lit:	1536
+Nodos bin:	2018
+Nodos mul:	1622
