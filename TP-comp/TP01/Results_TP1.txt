@@ -1,6 +1,9 @@
-Enlaces lit:	2925
-Enlaces bin:	2930
-Enlaces mul:	9070
-Nodos lit:	1536
-Nodos bin:	2018
-Nodos mul:	1622
+		bin		lit		mul
+Enlaces	2925	2930	9070
+Nodos	1536	2018	1622
+<k>		3.81	2.90	11.18
+k max	40.00	91.00	127.00
+k min	1.00	1.00	1.00
+density	0.0025	0.0014	0.0069
+C global	0.3462	0.0236	0.6186
+C_i		0.2925	0.0462	0.5546
