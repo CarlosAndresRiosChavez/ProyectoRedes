@@ -16,6 +16,24 @@ archive_bin="../data_TP1/yeast_Y2H.txt"
 archive_lit="../data_TP1/yeast_LIT.txt"
 archive_mul="../data_TP1/yeast_AP-MS.txt"
 
+###### Graficos
+#lista = ldata(archive_mul)
+
+#print(lista)
+#
+#G = nx.Graph()
+#
+#
+#G.add_edges_from(lista)
+#
+#nx.draw(G, with_labels=True, font_weight='bold')
+#
+#
+## Numero de enlaces
+#
+#
+#plt.show()
+#####################
 
 archive_lit2=open("../data_TP1/yeast_LIT.txt", "r").readlines()
 archive_mul2=open("../data_TP1/yeast_AP-MS.txt", "r").readlines()
@@ -134,20 +152,46 @@ ci_bin = nx.average_clustering(Gbin)
 ci_mul = nx.average_clustering(Gmul)
 
 
-Results.write("C global\t%.4f\t%.4f\t%.4f\n" % (c_global_lit, c_global_bin, c_global_mul) )
+Results.write("C glob.\t%.4f\t%.4f\t%.4f\n" % (c_global_lit, c_global_bin, c_global_mul) )
 Results.write("C_i\t\t%.4f\t%.4f\t%.4f\n" % (ci_lit, ci_bin, ci_mul) )
 
-giant_lit = max(nx.connected_component_subgraphs(Glit), key=len)
+####### lit
+componentes_lit = nx.connected_component_subgraphs(Glit)
+diametros_lit = []
+for c in componentes_lit:
+    diametros_lit.append(nx.diameter(c))
 
-diam_lit = nx.diameter(giant_lit)
-print(diam_lit)
+diam_max_lit = max(diametros_lit)
 
-print(nx.connected_component_subgraphs(Glit))
+#print(diam_max_lit)
+
+###### bin
+componentes_bin = nx.connected_component_subgraphs(Gbin)
+diametros_bin = []
+for c in componentes_bin:
+    diametros_bin.append(nx.diameter(c))
+
+diam_max_bin = max(diametros_bin)
+
+#print(diam_max_bin)
+
+###### mul
+componentes_mul = nx.connected_component_subgraphs(Gmul)
+diametros_mul = []
+for c in componentes_mul:
+    diametros_mul.append(nx.diameter(c))
+
+diam_max_mul = max(diametros_mul)
+
+#print(diam_max_mul)
+
+#print(lista_componentes)
+#G1 = componentes[1]
 
 #diam_bin = nx.diameter(Gbin)
 #diam_mul = nx.diameter(Gmul)
 
-#Results.write("Diametro\t%.4f\t%.4f\t%.4f\n" % (diam_lit, diam_bin, diam_mul) )
+Results.write("Diam.\t%d\t\t%d\t\t%d\n" % (diam_max_lit, diam_max_bin, diam_max_mul) )
 
 Results.close()
 
