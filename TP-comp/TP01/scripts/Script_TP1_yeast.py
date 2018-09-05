@@ -93,7 +93,6 @@ nodes_lit=Glit.number_of_nodes()
 
 # Escribir resultados en outputFile
 Results.write("Nodos\t" + str(nodes_lit) + "\t" + str(nodes_bin) +"\t" + str(nodes_mul) + "\n")
-#Results.write("Nodos lit:	" + str(nodes_lit) + '\n' + "Nodos bin:	" + str(nodes_bin) +'\n' + "Nodos mul:	" + str(nodes_mul) + '\n')
 ##########################################
 
 
@@ -105,8 +104,6 @@ avDegree_bin = 2*lbin/nodes_bin
 avDegree_lit = 2*llit/nodes_lit
 
 Results.write("<k>\t\t%.2f\t%.2f\t%.2f\n" % (avDegree_lit, avDegree_bin, avDegree_mul) )
-#Results.write("<k>\t" + str(avDegree_lit) + "\t" + str(avDegree_bin) +"\t" + str(avDegree_mul) + "\n")
-#Results.write("<k> lit:	" + str(avDegree_lit) + '\n' + "<k> bin:	" + str(avDegree_bin) +'\n' + "<k> mul:	" + str(avDegree_mul) + '\n')
 
 # Grados maximo y minimo
 
