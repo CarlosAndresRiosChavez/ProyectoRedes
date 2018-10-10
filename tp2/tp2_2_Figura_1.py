@@ -3,6 +3,9 @@
 from __future__ import division
 import networkx as nx
 import matplotlib.pylab as plt
+from numpy import linspace
+
+ftsize = 16
 
 # Input files #################
 # Funcion para leer input files
@@ -45,66 +48,46 @@ lista_reg = ldata(archive_reg)
 Greg = nx.Graph()
 Greg.add_edges_from(lista_reg)
 
-
-
-# Funcion overlap de NODOS #
-def overlapEss(lista1, lista2):
+####################################
+def overlap_ess(lista):
 	fraction = 0
-	longitud = len(lista1) 
+	longitud = len(lista)
 	num = 0
-	for x in lista1:
-		for y in lista2:
+	for x in lista:
+		for y in l_essential:
 			if (x[0] == y[0]):
 				num = num + 1
 				fraction = num/longitud 
 	return fraction
-##########################
 
+######################################
+def fraccion_hubs_esenciales(grafo, cant_puntos):
+    D_grados = grafo.degree()
+    items = D_grados.items()
+    sorted_items = sorted(items, key=lambda tup: tup[1])
 
-# FIGURA 1 Red bin #########################
+    fracciones = linspace(0, 1, cant_puntos)
+    overlap_hubs_ess = []
+    for f in fracciones:
+        print(f)
+        cant_hubs = int(f*(len(sorted_items)))
+        hubs = sorted_items[-cant_hubs:]
+        overlap_hubs_ess.append(overlap_ess(hubs))
+    return fracciones, overlap_hubs_ess
+    
+resultados_bin = fraccion_hubs_esenciales(Gbin, 1000)
+resultados_mul = fraccion_hubs_esenciales(Gmul, 1000)
+resultados_lit = fraccion_hubs_esenciales(Glit, 1000)
+resultados_reg = fraccion_hubs_esenciales(Greg, 1000)
+plt.plot(resultados_bin[0], resultados_bin[1], label='BIN')
+plt.plot(resultados_mul[0], resultados_mul[1], label='MUL')
+plt.plot(resultados_lit[0], resultados_lit[1], label='LIT')
+plt.plot(resultados_reg[0], resultados_reg[1], label='REG')
 
-# Calcular numero de nodos ##############
-# Utilizamos la funcion 'number_of_nodes' de Networkx
-# Numero de nodos
-nodes_bin=Gbin.number_of_nodes()
-
-# Lista de nodos
-nodes = Gbin.nodes()
-
-# Diccionario de nodos y grados
-D_grados_bin = Gbin.degree()
-
-# Lista de nodos y grados
-items = D_grados_bin.items()
-##print items
-
-# Lista de nodos y grados ordenada
-sorted_items = sorted(items, key=lambda tup: tup[1])
-##print sorted_items
-
-# Longitud de lista de nodos y grados ordenada
-##print len(sorted_items)
-
-
-
-# Definir lista para calcular enrichment
-#for cutoff in range(0,1000,1):
-#
-#	corte= int((cutoff/1000)*(len(sorted_items)))
-#
-#	hubs = sorted_items[-corte:]
-#	#print hubs
-#
-#
-
-
-corte= int((1)*(len(sorted_items)))
-
-hubs = sorted_items[-corte:]
-
-print l_essential[1]
-print (hubs[1])[0]
-
-print "overlap", overlapEss(l_essential, hubs)
-
-
+plt.grid()
+plt.legend()
+plt.ylim([0,1])
+plt.xlabel('fraccion de nodos que son hubs', fontsize = ftsize)
+plt.ylabel('fraccion de hubs que son esenciales', fontsize = ftsize)
+#plt.savefig('./figura_1_zotenko.png')
+plt.show()
