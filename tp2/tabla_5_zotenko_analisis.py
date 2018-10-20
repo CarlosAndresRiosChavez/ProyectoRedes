@@ -23,17 +23,12 @@ pares_apms = "./dataset/pares_totales_apms.txt"
 pares_lit = "./dataset/pares_totales_lit.txt"
 pares_reg = "./dataset/pares_totales_reg.txt"
 
-# funcion para despejar alpha o beta a partir de la pendiente u ordenada del ajuste:
-def despeje(param):
-    desp = 1 - np.exp(param)
-    return desp
-
 # cargo los alpha y beta de cada red. La 1ra tupla tiene los valores simulados, la 2da los valores de las regresiones
 # siempre el primero es alpha y el 2do beta
-alpha_beta_y2h = [(0.009, 0.11), (despeje(0.004031082305937902), despeje(-0.21291406963842863))]
-alpha_beta_apms = [(0.035, 0.19), (despeje(-0.00280119699009654), despeje(-0.28420142942303056))]
-alpha_beta_lit = [(0.04, 0.2), (despeje(0.02395538488062474), despeje(-0.6341653367172304))]
-alpha_beta_reg = [(0.04, 0.14), (despeje(-0.022625988366022993), despeje(-0.0648211722485589))]
+alpha_beta_y2h = [(0.009, 0.11), (0.0206, 0.1606)]
+alpha_beta_apms = [(0.035, 0.19), (0.0406, 0.2221)]
+alpha_beta_lit = [(0.04, 0.2), (0.0724, 0.2803)]
+alpha_beta_reg = [(0.04, 0.14), (0.0485, 0.0575)]
 
 # acomodo las cosas para iterar
 files_redes = [file_y2h, file_apms, file_lit, file_reg]
@@ -64,7 +59,6 @@ def P_E(nodo, grafo, red, simulado=True):
         beta = alphas_y_betas[red][1][1]
     p = 1 - ( (1 - alpha)**k )*(1 - beta)
     
-    print("%.4f, %.4f" % (alpha, beta))
     return p
 
 ############################################################################################################################################
@@ -74,14 +68,23 @@ def P_E(nodo, grafo, red, simulado=True):
 ## en el caso experimental me estan quedando alpha negativos???
 
 # aca defino si trabajo usando los simulados o los experimentales
-es_simulado = False
+es_simulado = True
 
 if es_simulado == True:
     print("Usando parametros SIMULADOS")
+    
+    results = open("./numero_esperado_simulados.txt", "w")
+    results.write("Usando parametros simulados:\n\n")
+
 if es_simulado == False:
     print("Usando parametros EXPERIMENTALES")
+    
+    results = open("./numero_esperado_experimentales.txt", "w")
+    results.write("Usando parametros experimentales:\n\n")
 
-for i in range(len(nombres[:1])):
+results.write("\t\t\tReal\tModelado\n")
+    
+for i in range(len(nombres)):
     # defino el grafo para pedir el grado de los nodos
     lista = ldata(files_redes[i])
     G = nx.Graph()
@@ -117,5 +120,9 @@ for i in range(len(nombres[:1])):
     print(nombres[i])
     print("=======")
     print("Numero esperado = %d" % (numero_esperado))
-    print("Numero experimental = %d" % cant_mismo_tipo)
+    print("Numero real = %d" % cant_mismo_tipo)
+    
+    results.write("%s\t\t%d\t\t%d\n" % (nombres[i], cant_mismo_tipo, numero_esperado))
+    
+results.close()
     
