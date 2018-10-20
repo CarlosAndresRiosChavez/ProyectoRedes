@@ -1,0 +1,7 @@
+Usando parametros simulados:
+
+			Real	Modelado
+red Y2H		349		230
+red AP-MS	5965	3330
+red LIT		375		191
+red REG		6195	3270

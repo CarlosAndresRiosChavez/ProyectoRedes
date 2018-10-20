@@ -1,0 +1,7 @@
+Usando parametros experimentales:
+
+			Real	Modelado
+red Y2H		349		190
+red AP-MS	5965	3562
+red LIT		375		198
+red REG		6195	3315
