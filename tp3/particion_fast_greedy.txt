@@ -1,0 +1,4 @@
+Community: Stripes,Hook,TR99,Grin,Beak,Fork,Kringel,SN63,TR120,SN4,TSN103,Scabs,Zipfel,Bumper,TR88,Shmuddel,SN9,Thumper,TR77,TSN83,SN96,Fish,Whitetip
+Community: DN21,Jet,DN16,Quasi,Web,MN23,Upbang,TR82,Notch,Knit,SN90,Feather,Oscar,PL,Beescratch,Mus,Ripplefluke,Gallatin,Number1,Wave,DN63,Zig
+Community: Jonah,Five,Patchback,Cross,Topless,Trigger,Haecksel,Double,MN105,MN60,CCL,MN83,Vau,Zap,SMN5
+Community: SN100,SN89
