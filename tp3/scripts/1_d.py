@@ -24,7 +24,6 @@ for j in range(len(particiones)):
 
     print("Particion " + label_particion[j])
     
-    # empiezo con louvain
     particion = ldata(particiones[j])
 
     grupos = []
@@ -87,7 +86,7 @@ for j in range(len(particiones)):
     N = 1000
 
     # con estas variables voy a hacer los histogramas
-    # lista_m tiene que contener 4 histogramas, no uno
+    # hist_m tiene que contener 4 histogramas, no uno
     hist_m = []
     hist_f = []
     hist_na = []
