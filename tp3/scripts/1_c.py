@@ -29,22 +29,18 @@ cant_particiones = len(particiones)
 ###########################################
 ########### Matriz de confusión ###########
 ###########################################
-
 for i in range(cant_particiones):
     for j in range(cant_particiones):
     
         # agarro 2 particiones
         particion_1 = ldata(particiones[i])
         particion_2 = ldata(particiones[j])
-
         particion_1 = dict(particion_1)
         particion_2 = dict(particion_2)
-
         si_1_si_2 = 0
         no_1_si_2 = 0
         si_1_no_2 = 0
         no_1_no_2 = 0
-
         # delfines a y b. Busco las etiquetas en ambas part
         for d_a in particion_1:
             for d_b in particion_1:
@@ -91,17 +87,32 @@ cant_nodos = len(particion_1)
 cant_grupos_1 = max(int(particion_1[d]) for d in particion_1) + 1
 cant_grupos_2 = max(int(particion_2[d]) for d in particion_2) + 1
 
+# ahora quiero saber cuantos miembros tiene cada comunidad
 # es mas facil con count
 # armo listas con las etiquetas de pertenencia de cada delfin
 
 etiquetas_1 = []
+etiquetas_2 = []
 
 for d in particion_1:
     etiquetas_1.append(particion_1[d])
 
-sizes_grupos = []
+for d in particion_2:
+    etiquetas_2.append(particion_2[d])
+
+sizes_grupos_1 = []
+sizes_grupos_2 = []
     
 for i in range(cant_grupos_1):
-    sizes_grupos.append(etiquetas_1.count(str(i)))
+    sizes_grupos_1.append(etiquetas_1.count(str(i)))
+
+for i in range(cant_grupos_2):
+    sizes_grupos_2.append(etiquetas_2.count(str(i)))
     
-print(sizes_grupos)
+# ahora calculo las probabilidades de pertenecer a cada grupo
+# es dividir la cant de nodos de cada grupo por la cant total de nodos
+
+probas_grupos_1 = [s/cant_nodos for s in sizes_grupos_1]
+probas_grupos_2 = [s/cant_nodos for s in sizes_grupos_2]
+
+
