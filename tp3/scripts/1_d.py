@@ -2,7 +2,7 @@ from __future__ import division
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-from numpy import linspace
+from numpy import linspace, mean
 
 def ldata(archive):
     f=open(archive)
@@ -15,15 +15,18 @@ def ldata(archive):
     
 generos = ldata("../dataset/dolphinsGender.txt")
 
-particiones = ["../dataset/particion_louvain.txt", "../dataset/particion_edge_betweenness.txt", "../dataset/particion_fast_greedy_andres.txt"]
+#particiones = ["../dataset/particion_louvain.txt", "../dataset/particion_edge_betweenness.txt", "../dataset/particion_fast_greedy_andres.txt", "../dataset/particion_infomap.txt"]
+particiones = ["../dataset/particion_louvain.txt"]
 
-label_particion = ["Louvain", "Edge Betweenness", "Fast Greedy"]
+
+label_particion = ["Louvain", "Edge Betweenness", "Fast Greedy", "Infomap"]
 
 # itero sobre las distintas particiones
 for j in range(len(particiones)):
 
     print("Particion " + label_particion[j])
     
+    # empiezo con louvain
     particion = ldata(particiones[j])
 
     grupos = []
@@ -86,7 +89,7 @@ for j in range(len(particiones)):
     N = 1000
 
     # con estas variables voy a hacer los histogramas
-    # hist_m tiene que contener 4 histogramas, no uno
+    # lista_m tiene que contener 4 histogramas, no uno
     hist_m = []
     hist_f = []
     hist_na = []
@@ -156,29 +159,46 @@ for j in range(len(particiones)):
             generos_en_grupos_rand.append((label, fraccion_m, fraccion_f, fraccion_na))
 
     # grafico histogramas
-
+    
+    
+    
     # machos
     for i in range(cant_grupos):
         nombre = "../plots/" + label_particion[j] + " - Histograma machos - Grupo " + str(i) + ".png"
         titulo = label_particion[j] + " - Grupo " + str(i) + "\nN = " + str(N)
         
+        # calculo el mean de la dist para saber de que lado esta mi valor experimental
+        mean_dist = mean(hist_m[i])
+        
         fig = plt.figure()
-        plt.hist(hist_m[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        #plt.hist(hist_m[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        plt.hist(hist_m[i], label='Modelo nulo')
+        
         # grafico el valor experimental
         plt.axvline(x = generos_en_grupos[i][1], color='red', label='Experimental')
+        
+        # señalo el maximo
+        plt.axvline(x = mean_dist, color='green')
+        
         plt.xlabel("fraccion de machos")
         plt.suptitle(titulo)
         plt.legend()
         plt.savefig(nombre)
         plt.close(fig)
-
+        
+        # ademas calculo el p-valor
+        # tengo que ver donde esta el maximo de la distribucion
+        
+        
+    
     # hembras
     for i in range(cant_grupos):
         nombre = "../plots/" + label_particion[j] + " - Histograma hembras - Grupo " + str(i) + ".png"
         titulo = label_particion[j] + " - Grupo " + str(i) + "\nN = " + str(N)
         
         fig = plt.figure()
-        plt.hist(hist_f[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        #plt.hist(hist_f[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        plt.hist(hist_f[i], label='Modelo nulo')
         # grafico el valor experimental
         plt.axvline(x = generos_en_grupos[i][2], color='red', label='Experimental')
         plt.xlabel("fraccion de hembras")
@@ -193,7 +213,8 @@ for j in range(len(particiones)):
         titulo = label_particion[j] + " - Grupo " + str(i) + "\nN = " + str(N)
         
         fig = plt.figure()
-        plt.hist(hist_na[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        #plt.hist(hist_na[i], bins = linspace(0, 1, 25), label='Modelo nulo')
+        plt.hist(hist_na[i], label='Modelo nulo')
         # grafico el valor experimental
         plt.axvline(x = generos_en_grupos[i][3], color='red', label='Experimental')
         plt.xlabel("fraccion de NA")
