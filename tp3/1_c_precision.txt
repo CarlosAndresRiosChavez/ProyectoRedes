@@ -1,0 +1,16 @@
+                  Louvain vs Louvain - Precision =  1.00
+         Louvain vs Edge Betweenness - Precision =  0.91
+              Louvain vs Fast Greedy - Precision =  0.88
+                  Louvain vs Infomap - Precision =  0.95
+         Edge Betweenness vs Louvain - Precision =  0.91
+Edge Betweenness vs Edge Betweenness - Precision =  1.00
+     Edge Betweenness vs Fast Greedy - Precision =  0.84
+         Edge Betweenness vs Infomap - Precision =  0.95
+              Fast Greedy vs Louvain - Precision =  0.88
+     Fast Greedy vs Edge Betweenness - Precision =  0.84
+          Fast Greedy vs Fast Greedy - Precision =  1.00
+              Fast Greedy vs Infomap - Precision =  0.89
+                  Infomap vs Louvain - Precision =  0.95
+         Infomap vs Edge Betweenness - Precision =  0.95
+              Infomap vs Fast Greedy - Precision =  0.89
+                  Infomap vs Infomap - Precision =  1.00
