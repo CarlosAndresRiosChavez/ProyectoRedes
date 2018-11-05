@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from numpy import log
 
 # matriz de confusion
 # para cada par de algoritmos tengo una matriz
@@ -29,6 +30,8 @@ cant_particiones = len(particiones)
 ###########################################
 ########### Matriz de confusión ###########
 ###########################################
+results = open("../1_c_precision.txt", "w")
+
 for i in range(cant_particiones):
     for j in range(cant_particiones):
     
@@ -72,47 +75,128 @@ for i in range(cant_particiones):
         # calculo la precision
         precision = (si_1_si_2 + no_1_no_2)/(si_1_si_2 + no_1_si_2 + si_1_no_2 + no_1_no_2)
         print("Precisión = %.2f\n" % (precision))
+        
+        s = "%s vs %s - Precision = " % (label_particion[i], label_particion[j])
+        results.write("%51s %.2f\n" % (s, precision))
+
+results.close()
 """
+
 #########################################
 ########### Información mutua ###########
 #########################################
 
-# agarro 2 particiones
-particion_1 = dict(ldata(particiones[0]))
-particion_2 = dict(ldata(particiones[1]))
+results = open("../1_c_informacion_mutua.txt", "w")
 
-cant_nodos = len(particion_1)
-
-# para cada una calculo la proba de pertenecer a cada grupo
-cant_grupos_1 = max(int(particion_1[d]) for d in particion_1) + 1
-cant_grupos_2 = max(int(particion_2[d]) for d in particion_2) + 1
-
-# ahora quiero saber cuantos miembros tiene cada comunidad
-# es mas facil con count
-# armo listas con las etiquetas de pertenencia de cada delfin
-
-etiquetas_1 = []
-etiquetas_2 = []
-
-for d in particion_1:
-    etiquetas_1.append(particion_1[d])
-
-for d in particion_2:
-    etiquetas_2.append(particion_2[d])
-
-sizes_grupos_1 = []
-sizes_grupos_2 = []
+for x in range(cant_particiones):
+    for y in range(cant_particiones):
     
-for i in range(cant_grupos_1):
-    sizes_grupos_1.append(etiquetas_1.count(str(i)))
+        print("%s vs %s" % (label_particion[x], label_particion[y]))
+        
+        particion_1 = dict(ldata(particiones[x]))
+        particion_2 = dict(ldata(particiones[y]))
 
-for i in range(cant_grupos_2):
-    sizes_grupos_2.append(etiquetas_2.count(str(i)))
-    
-# ahora calculo las probabilidades de pertenecer a cada grupo
-# es dividir la cant de nodos de cada grupo por la cant total de nodos
+        cant_grupos_1 = max(int(particion_1[d]) for d in particion_1) + 1
+        cant_grupos_2 = max(int(particion_2[d]) for d in particion_2) + 1
 
-probas_grupos_1 = [s/cant_nodos for s in sizes_grupos_1]
-probas_grupos_2 = [s/cant_nodos for s in sizes_grupos_2]
+        cant_nodos = len(particion_1)
 
+        # separo los delfines por comunidad
+        comunidades_1 = []
+        for i in range(cant_grupos_1):
+            comunidades_1.append([])
 
+        for d in particion_1:
+            comunidades_1[int(particion_1[d])].append(d)
+
+        comunidades_2 = []
+        for i in range(cant_grupos_2):
+            comunidades_2.append([])
+
+        for d in particion_2:
+            comunidades_2[int(particion_2[d])].append(d)
+            
+        # armo la matriz de coocurrencia:
+        coocurrencia = []
+        for i in range(cant_grupos_1):
+            coocurrencia.append([])
+            
+        for i in range(cant_grupos_1):
+            for j in range(cant_grupos_2):
+                s1 = set(comunidades_1[i])
+                s2 = set(comunidades_2[j])
+                inter =  s1.intersection(s2)
+                coocurrencia[i].append(len(inter))
+
+        # for c in coocurrencia:
+            # print(c)
+        # print()
+            
+        # la matriz de probas conjuntas es la de coocurrencia dividido por la cant total de delfines:
+        probas_conjuntas = []
+        for i in range(cant_grupos_1):
+            probas_conjuntas.append([])
+            
+        for i in range(cant_grupos_1):
+            for j in range(cant_grupos_2):
+                probas_conjuntas[i].append(coocurrencia[i][j]/cant_nodos)
+
+        #for p in probas_conjuntas:
+        #    print(p)
+        #print()
+
+        # para cada par de particiones deberia obtener un valor de I
+        # me hago otra matriz que tenga los argumentos del log
+
+        args_log = []
+        for i in range(cant_grupos_1):
+            args_log.append([])
+            
+        for i in range(cant_grupos_1):
+            for j in range(cant_grupos_2):
+                p_c1 = len(comunidades_1[i])/cant_nodos
+                p_c2 = len(comunidades_2[j])/cant_nodos
+                
+                denom = p_c1*p_c2
+                
+                args_log[i].append(probas_conjuntas[i][j]/denom)
+
+        #for a in args_log:
+        #    print(a)
+        #print()
+
+        # para calcular I tengo que sumar:
+        I = 0
+        for i in range(cant_grupos_1):
+            for j in range(cant_grupos_2):
+                if probas_conjuntas[i][j] == 0:
+                    continue
+                sumando = probas_conjuntas[i][j]*log(args_log[i][j])
+                I = I + sumando
+
+        #print(I)
+
+        # me da mayor que 1. Puedo hacer la version normalizada
+
+        H_c1 = 0
+        for c in comunidades_1:
+            p_c1 = len(c)/cant_nodos
+            sumando = p_c1*log(p_c1)
+            H_c1 = H_c1 - sumando
+
+        H_c2 = 0
+        for c in comunidades_2:
+            p_c2 = len(c)/cant_nodos
+            sumando = p_c2*log(p_c2)
+            H_c2 = H_c2 - sumando
+
+        # I normalizada:
+        I_norm = 2*I/(H_c1 + H_c2)
+
+        print("I_n = %.2f" % (I_norm))
+        print()
+        
+        s = "%s vs %s - I_n = " % (label_particion[x], label_particion[y])
+        results.write("%45s %.2f\n" % (s, I_norm))
+
+results.close()
