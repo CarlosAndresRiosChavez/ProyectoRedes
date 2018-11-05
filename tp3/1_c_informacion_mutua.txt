@@ -1,0 +1,16 @@
+                  Louvain vs Louvain - I_n =  1.00
+         Louvain vs Edge Betweenness - I_n =  0.78
+              Louvain vs Fast Greedy - I_n =  0.74
+                  Louvain vs Infomap - I_n =  0.88
+         Edge Betweenness vs Louvain - I_n =  0.78
+Edge Betweenness vs Edge Betweenness - I_n =  1.00
+     Edge Betweenness vs Fast Greedy - I_n =  0.66
+         Edge Betweenness vs Infomap - I_n =  0.91
+              Fast Greedy vs Louvain - I_n =  0.74
+     Fast Greedy vs Edge Betweenness - I_n =  0.66
+          Fast Greedy vs Fast Greedy - I_n =  1.00
+              Fast Greedy vs Infomap - I_n =  0.77
+                  Infomap vs Louvain - I_n =  0.88
+         Infomap vs Edge Betweenness - I_n =  0.91
+              Infomap vs Fast Greedy - I_n =  0.77
+                  Infomap vs Infomap - I_n =  1.00
