@@ -17,6 +17,7 @@ def etapa_0(file_comunidad, numero_de_comunidad):
     # agarro una comunidad
     subset = open(file_comunidad, 'r').readlines()
     lenSubset = len(subset)
+    #print("size comunidad: %d" % (lenSubset))
 
     # Genoma de Bsuis 1330 uniprot con GO terms
     # aca elijo una clasificacion (BP, CC, o MF)
@@ -80,3 +81,4 @@ def etapa_0(file_comunidad, numero_de_comunidad):
                             
 
         outputFile.close()
+    return(lenSubset)
