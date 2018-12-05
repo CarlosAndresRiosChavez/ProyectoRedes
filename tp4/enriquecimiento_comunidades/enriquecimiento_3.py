@@ -11,27 +11,38 @@
 # Modulos #####
 import re
 import os
+import glob
 ###############
 
 def etapa_3(numero_de_comunidad):
-
+    
+    path_input = "./3/"
+    
     # estos inputs son los que se calcularon en la etapa 2, ex web
-    input_files_comunidad = ["./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_BP_CON_GEN_ID_ancestors_BP_iiiii_proporciones.txt", "./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_CC_CON_GEN_ID_ancestors_CC_iiiii_proporciones.txt", "./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_MF_CON_GEN_ID_ancestors_MF_iiiii_proporciones.txt"]
+    #input_files_comunidad = ["./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_BP_CON_GEN_ID_ancestors_BP_iiiii_proporciones.txt", "./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_CC_CON_GEN_ID_ancestors_CC_iiiii_proporciones.txt", "./3/0.3.community_" + numero_de_comunidad + "_proteome_crudos_asociados_MF_CON_GEN_ID_ancestors_MF_iiiii_proporciones.txt"]
+    
+    input_files_comunidad = glob.glob(path_input + "*community_" + numero_de_comunidad + "_*.txt")
 
     # estos se calcularon igual, pero no hace falta calcularlos cada vez
-    input_files_genoma = ["./3/0.3.Bmelitensis16M_nodes_proportions_BP.txt", "./3/0.3.Bmelitensis16M_nodes_proportions_CC.txt", "./3/0.3.Bmelitensis16M_nodes_proportions_MF.txt"]
+    #input_files_genoma = ["./3/0.3.Bmelitensis16M_nodes_proportions_BP.txt", "./3/0.3.Bmelitensis16M_nodes_proportions_CC.txt", "./3/0.3.Bmelitensis16M_nodes_proportions_MF.txt"]
 
-    categorias = ["BP", "CC", "MF"]
+    #categorias = ["BP", "CC", "MF"]
 
     etiqueta_comunidad = str(numero_de_comunidad)
-
 
     #########################################################################
 
 
     for r in range(len(input_files_comunidad)):
         
-        genoma = input_files_genoma[r]
+        # obtengo la categoria a partir del input file:
+        str1 = input_files_comunidad[r].split('.')[-2]
+        categoria = str1.split('_')[-3]
+        
+        #genoma = input_files_genoma[r]
+        # agarro solo el genoma de la categoria
+        # le pongo el indice 0 porque glob me lo mete en una lista, y espero que siempre sea un solo elemento
+        genoma = glob.glob(path_input + "*Bmelitensis*" + categoria + ".txt")[0]
 
         # Generar total_GO_terms_por_categ file   #
         ###########################################
@@ -63,8 +74,14 @@ def etapa_3(numero_de_comunidad):
         lenSubset=len(open(subsetFile, 'r').readlines())
         #prefix=subsetFile[10:14]
         #sufix=subsetFile[-6:-4]
+        
+        #prefix = "community_" + etiqueta_comunidad
+        
+        # aca arriba se puden confundir todas las que empiezan con el mismo numero. Capaz tendria que agregar un "_"
         prefix = "community_" + etiqueta_comunidad
-        sufix = categorias[r]
+        
+        #sufix = categorias[r]
+        sufix = categoria
 
         # GO proportions en el genoma para la misma categoria (CC, MF, o BP)
         GenomProporFile = genoma
