@@ -5,6 +5,7 @@ from __future__ import division
 from collections import Counter
 import numpy as np
 import glob
+import os
 
 def file_len(fname):
     with open(fname) as f:
@@ -30,9 +31,18 @@ def etapa_2(numero_de_comunidad):
 
     files = glob.glob(path_input + "*community_" + numero_de_comunidad + "_*.txt")
 
+    # ojo con lo siguiente: hay algunas comunidades para las que no se encuentra ningun GO term para ciertas categorias. Eso hace que algunos de los input files de arriba esten vacios. El codigo que sigue no lo sabe manejar, entonces antes de ejecutarlo hago una limpieza, eliminando input files vacios. Al final del dia va a haber algunos "./4/community_*_enriquecidos_*.txt" que no van a estar.
+
+    files_curado = []
+    for f in files:
+        # si el file no esta vacio...
+        if os.stat(f).st_size != 0:
+            # ...me lo quedo
+            files_curado.append(f)
+    
     #print(files)
     
-    for f in files:
+    for f in files_curado:
         #print(f)
         # esta etiqueta la voy a usar para darle nombre a los txt de output.
         # notar que tire el 0.2 que tenia. De todos modos habria que simplificar la nomenclatura
